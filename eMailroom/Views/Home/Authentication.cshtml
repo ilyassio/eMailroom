@@ -1,0 +1,56 @@
+﻿@{
+    Layout = null;
+    var alertClass = "";
+    var alertMessage = "";
+    if (Request.QueryString["alertClass"] != null)
+    {
+        alertClass = "alert alert-" + Request.QueryString["alertClass"];
+        alertMessage = Request.QueryString["alertMessage"];
+    }
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Authentication - OpenMail</title>
+    @Styles.Render("~/Content/css")
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark-blue">
+        <a class="navbar-brand mb-0 h1" href="">eMailroom</a>
+    </nav>
+
+    <main class="mt-5">
+        <div id="authentication-form" class="container">
+            <div id="alert" class="@alertClass" role="alert">
+                @alertMessage
+            </div>
+            <form method="post" action="~/Home/Signin" class="mw-500px m-auto">
+                <div class="form-group">
+                    <label for="input-id">Id</label>
+                    <input type="text" class="form-control" id="input-id" name="id" required autocomplete="bbb">
+                </div>
+                <div class="form-group mb-5">
+                    <label for="input-password">Password</label>
+                    <input type="password" class="form-control" id="input-password" name="password" required autocomplete="aaa">
+                </div>
+
+                <button type="submit" class="btn btn-outline-primary btn-block">Sign in</button>
+            </form>
+        </div>
+    </main>
+
+    <footer>
+        <hr />
+        <p class="ml-3">&copy; @DateTime.Now.Year - OpenMail</p>
+    </footer>
+
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    
+</body>
+</html>
