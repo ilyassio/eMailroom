@@ -1,0 +1,255 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Account" xml:space="preserve">
+    <value>Compte</value>
+  </data>
+  <data name="AddMail" xml:space="preserve">
+    <value>Ajouter courier</value>
+  </data>
+  <data name="AttachementsUploadMsg" xml:space="preserve">
+    <value>Cliquez pour sélectionner les pièces jointes ou juste déposez-les ici.</value>
+  </data>
+  <data name="ChangeLanguage" xml:space="preserve">
+    <value>Changer la langue</value>
+  </data>
+  <data name="ChangePassword" xml:space="preserve">
+    <value>Changer le mot de passe</value>
+  </data>
+  <data name="ChangePasswordSuccess" xml:space="preserve">
+    <value>Mot de passe changé avec succès</value>
+  </data>
+  <data name="ChooseSelect" xml:space="preserve">
+    <value>Choisir...</value>
+  </data>
+  <data name="Companies" xml:space="preserve">
+    <value>Entreprises</value>
+  </data>
+  <data name="ConfirmPassword" xml:space="preserve">
+    <value>Confirmer mot de passe</value>
+  </data>
+  <data name="Contacts" xml:space="preserve">
+    <value>Contacts</value>
+  </data>
+  <data name="Date" xml:space="preserve">
+    <value>Date</value>
+  </data>
+  <data name="Email" xml:space="preserve">
+    <value>Email</value>
+  </data>
+  <data name="Employees" xml:space="preserve">
+    <value>Employés</value>
+  </data>
+  <data name="EmptyRequiredField" xml:space="preserve">
+    <value>Veuillez remplir tous les champs requis</value>
+  </data>
+  <data name="Error" xml:space="preserve">
+    <value>Une erreur est survenue, contactez l'administrateur</value>
+  </data>
+  <data name="Firstname" xml:space="preserve">
+    <value>Prénom</value>
+  </data>
+  <data name="Id" xml:space="preserve">
+    <value>Identifiant</value>
+  </data>
+  <data name="IdPasswordInvalid" xml:space="preserve">
+    <value>Identifiant et/ou mot de passe invalide</value>
+  </data>
+  <data name="Language" xml:space="preserve">
+    <value>Langue</value>
+  </data>
+  <data name="Lastname" xml:space="preserve">
+    <value>Nom</value>
+  </data>
+  <data name="MailAddedSuccess" xml:space="preserve">
+    <value>Courrier ajouté avec succès</value>
+  </data>
+  <data name="Mails" xml:space="preserve">
+    <value>Courriers</value>
+  </data>
+  <data name="MailUploadMsg" xml:space="preserve">
+    <value>Cliquez pour sélectionner un courrier ou juste déposez-le ici.</value>
+  </data>
+  <data name="Message" xml:space="preserve">
+    <value>Message</value>
+  </data>
+  <data name="MyAccount" xml:space="preserve">
+    <value>Mon compte</value>
+  </data>
+  <data name="NewMail" xml:space="preserve">
+    <value>Nouveau courrier</value>
+  </data>
+  <data name="NewPassword" xml:space="preserve">
+    <value>Nouveau mot de passe</value>
+  </data>
+  <data name="Object" xml:space="preserve">
+    <value>Objet</value>
+  </data>
+  <data name="OldPassword" xml:space="preserve">
+    <value>Ancien mot de passe</value>
+  </data>
+  <data name="OldPasswordError" xml:space="preserve">
+    <value>Ancien mot de passe incorrect</value>
+  </data>
+  <data name="Optional" xml:space="preserve">
+    <value>Optionnel</value>
+  </data>
+  <data name="Password" xml:space="preserve">
+    <value>Mot de passe</value>
+  </data>
+  <data name="PasswordConfirmationError" xml:space="preserve">
+    <value>La confirmation du mot de passe ne correspond pas</value>
+  </data>
+  <data name="Phone" xml:space="preserve">
+    <value>Téléphone</value>
+  </data>
+  <data name="Profile" xml:space="preserve">
+    <value>Profil</value>
+  </data>
+  <data name="Receiver" xml:space="preserve">
+    <value>Destinataire</value>
+  </data>
+  <data name="Sender" xml:space="preserve">
+    <value>Expéditeur</value>
+  </data>
+  <data name="Settings" xml:space="preserve">
+    <value>paramètres</value>
+  </data>
+  <data name="SignIn" xml:space="preserve">
+    <value>Se connecter</value>
+  </data>
+  <data name="SignOut" xml:space="preserve">
+    <value>Se déconnecter</value>
+  </data>
+  <data name="Tasks" xml:space="preserve">
+    <value>Taches</value>
+  </data>
+  <data name="Type" xml:space="preserve">
+    <value>Type</value>
+  </data>
+  <data name="ViewWithOcr" xml:space="preserve">
+    <value>Voir avec OCR</value>
+  </data>
+  <data name="AddNewContact" xml:space="preserve">
+    <value>Ajouter un nouveau contact</value>
+  </data>
+  <data name="SelectMoreThanOneFileError" xml:space="preserve">
+    <value>Vous ne pouvez pas sélectionner plus d'un fichier</value>
+  </data>
+</root>

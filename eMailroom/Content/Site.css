@@ -29,7 +29,7 @@ footer {
     background-color: #343a40 !important;
 }
 
-.list-group-item-action {
+#menu .list-group-item-action {
     color: rgba(255, 255, 255, 0.5);
 }
 
@@ -67,10 +67,16 @@ footer {
     width: 125px;
 }
 
-#inputs-change-password .input-group-text {
-    font-size: 14px;
-    font-weight: 500;
-    width: 144px;
+#collapse-profil .input-group-text {
+    font-size: 15px;
+    font-weight: 400;
+    width: 125px;
+}
+
+#collapse-change-password .input-group-text {
+    font-size: 15px;
+    font-weight: 400;
+    width: 180px;
 }
 
 button.dropdown-toggle {

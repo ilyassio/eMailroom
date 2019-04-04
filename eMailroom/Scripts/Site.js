@@ -1,7 +1,15 @@
-﻿$(document).ready(function (e) {
+﻿var MailUploadMsg;
+var AttachementsUploadMsg;
+var EmptyRequiredField;
+var PasswordConfirmationError;
+var SelectMoreThanOneFileError;
+var AddNewContact;
+var ChooseSelect;
+
+$(document).ready(function (e) {
     function refresh() {
-        $('#drop-text-mail').text("Click to select mail or just drop it here.");
-        $('#drop-text-attachements').text("Click to select attachements or just drop them here.");
+        $('#drop-text-mail').text(MailUploadMsg);
+        $('#drop-text-attachements').text(AttachementsUploadMsg);
         $('form').each(function () { this.reset() });
         $("#main-alert").removeClass();
         $("#main-alert").html('');
@@ -9,8 +17,14 @@
         $('#select-receiver').selectpicker('refresh');
         $('#select-type').selectpicker('refresh');
     }
+    function refreshInputsChangePassword() {
+        $('#input-confirm-password').removeClass('is-invalid');
+        $('#input-confirm-password').removeClass('is-valid');
+        $('#btn-change-password').addClass('d-none');
+    }
+    $('#form-change-password').submit(function (e) {
+        e.preventDefault();
 
-    $('#btn-change-password').on('click', function () {
         function clearAlert() {
             $("#alert-change-password").removeClass();
             $("#alert-change-password").addClass("alert");
@@ -22,38 +36,42 @@
         if ($("#input-old-password").val() == "" || $("#input-new-password").val() == "" || $("#input-confirm-password").val() == "") {
 
             clearAlert();
-
+            
             $("#alert-change-password").addClass("alert-danger");
-            $("#alert-change-password").html("Please complete all fields!");
-            $("#modal-change-password").effect("shake");
+            $("#alert-change-password").html(EmptyRequiredField);
+            $("#modal-settings").effect("shake");
         }
         else if ($("#input-new-password").val() != $("#input-confirm-password").val()) {
 
             clearAll();
 
             $("#alert-change-password").addClass("alert-danger");
-            $("#alert-change-password").html("Password confirmation doesn't match");
-            $("#modal-change-password").effect("shake");
-
+            $("#alert-change-password").html(PasswordConfirmationError);
+            $("#modal-settings").effect("shake");
         }
         else {
-            $.post(
-                '/Home/ChangePassword',
-                { oldPassword: $("#input-old-password").val(), newPassword: $("#input-new-password").val(), confirmPassword: $("#input-confirm-password").val() },
-                function (response) {
+            var formData = new FormData(this);
+            $.ajax({
+                url: '/Home/ChangePassword',
+                type: 'POST',
+                data: formData,
+                cache: false,
+                success: function (response) {
                     if (!response.signedIn)
                         window.location.reload(true);
                     else {
                         clearAll();
-
+                        refreshInputsChangePassword();
                         $("#alert-change-password").addClass("alert-" + response.alertClass);
                         $("#alert-change-password").html(response.alertMessage);
 
                         if (response.alertClass == "danger")
-                            $("#modal-change-password").effect("shake");
-                    }
-                }
-            );
+                            $("#modal-settings").effect("shake");
+                    }                    
+                },
+                contentType: false,
+                processData: false
+            });
         }
     });
 
@@ -63,39 +81,32 @@
 
             var file = $(this).prop("files");
             var filename = $.map(file, function (val) { return val.name; });
-            var string2 = filename.join(', ');
 
-            $('#drop-text-mail').text("Selected file : " + string2);
+            $('#drop-text-mail').text(filename.join(', '));
 
             $('#btn-ocr').removeClass('d-none');
         }
         else if (this.files.length == 0) {
             $('#btn-ocr').addClass('d-none');
-            $('#drop-text-mail').text("Click to select mail or just drop it here.");
+            $('#drop-text-mail').text(MailUploadMsg);
         }
         else {
             $('#btn-ocr').addClass('d-none');
-            $('#drop-text-mail').text("You can not select more than one mail file! Click to retry");
+            $('#drop-text-mail').text(SelectMoreThanOneFileError);
         }
     });
 
     $('#input-attachements').change(function () {
 
         if (this.files.length > 0) {
-            var string1;
-            if (this.files.length > 1)
-                string1 = "Selected files : ";
-            else
-                string1 = "Selected file : ";
-
+            
             var files = $(this).prop("files");
             var filenames = $.map(files, function (val) { return val.name; });
-            var string2 = filenames.join(' ; ');
 
-            $('#drop-text-attachements').text(string1 + string2);
+            $('#drop-text-attachements').text(filenames.join(' ; '));
         }
         else {
-            $(this).next().text("Click to select attachements or just drop them here.");
+            $(this).next().text(AttachementsUploadMsg);
         }
     });
 
@@ -150,13 +161,13 @@
                 var Parties = JSON.parse(response);
 
                 var btnAddNewContact = document.createElement("button");
-                btnAddNewContact.innerText = "Add new contact";
+                btnAddNewContact.innerText = AddNewContact;
                 btnAddNewContact.setAttribute("type", "button");
                 btnAddNewContact.setAttribute("id", "btn-add-new-contact");
                 btnAddNewContact.setAttribute("class", "btn btn-block btn-light rounded-0 border-0");
 
-                $("#select-sender").append('<option selected value="" >Choose...</option>');
-                $("#select-receiver").append('<option selected value="" >Choose...</option>');
+                $("#select-sender").append('<option selected value="" >'+ChooseSelect+'</option>');
+                $("#select-receiver").append('<option selected value="" >'+ChooseSelect+'</option>');
 
 
                 if ($("#select-type").val() == "incoming") {
@@ -189,7 +200,6 @@
                 $('.dropdown-menu').addClass("pb-0");
             }
 
-
         );
 
 
@@ -209,9 +219,48 @@
     });
 
     $('#btn-ocr').on('click', function () {
-        alert("Working on it");        
+        if ($('#input-mail')[0].files[0].value) {
+            alert(document.getElementById("input-mail").files[0].value)
+        }
+        else {
+            var fd = new FormData();
+            fd.append("mail", document.getElementById("input-mail").files[0]);
+            $.ajax({
+                url: 'ApplyOcr',
+                type: 'POST',
+                data: fd,
+                cache: false,
+                success: function (response) {
+                    $('#mail-upload').hide();
+                    $('#attachements-upload').hide();
+                    $('#div-ocr-view').addClass('mt-5');
+                    $('#div-ocr-view').addClass('p-5');
+                    $('#div-ocr-view').show();
+                    $('#div-ocr-view').html(response);
+                },
+                contentType: false,
+                processData: false
+            });    
+        }
     });
 
+    $('#inputs-change-password input').on('keyup', function () {
 
+        refreshInputsChangePassword();
 
+        if ($('#input-confirm-password').val() != "" && $('#input-new-password').val() != "") {
+            if ($('#input-confirm-password').val() != $('#input-new-password').val()) {
+                $('#input-confirm-password').addClass('is-invalid');
+            }
+            else {
+                $('#input-confirm-password').addClass('is-valid');
+                $('#btn-change-password').removeClass('d-none');
+            }
+        }
+       
+    });
+
+    $(".btn-edit").on('click', function () {
+        $(this).parents('div').prev().removeAttr('readonly');
+    });
 });

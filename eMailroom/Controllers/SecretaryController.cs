@@ -23,7 +23,7 @@ namespace eMailroom.Controllers
                 return RedirectToAction("Tasks");
         }
 
-        public ActionResult ListMails()
+        public ActionResult Mails()
         {
             if (Session["EmployeeId"] == null || (string)Session["EmployeeType"] != "Secretary")
                 return RedirectToAction("Authentication", "Home");
@@ -83,7 +83,7 @@ namespace eMailroom.Controllers
                 SqlDataReader reader;
                 DataTable table;
 
-                query = "SELECT Id, Position, Firstname, Lastname FROM [Employee] WHERE Position <> 'Secretary' AND Position <> 'Technician' ORDER BY Position, Lastname, Firstname";
+                query = "SELECT Id, Position, Firstname, Lastname FROM [Employee] WHERE Position <> 'Secretary' ORDER BY Position, Lastname, Firstname";
                 reader = Database.ExecuteDqlQuery(query);
 
                 if (reader != null && reader.HasRows)
@@ -125,7 +125,6 @@ namespace eMailroom.Controllers
 
                         try
                         {
-
                             if (Request.Files["mail"].ContentLength > 0 && Path.GetExtension(Request.Files["mail"].FileName).ToUpper() == ".PDF")
                             {
                                 fileName = Path.GetFileName(Request.Files["mail"].FileName);
@@ -178,25 +177,24 @@ namespace eMailroom.Controllers
                         }
 
                         if (mail.Save())
-                            return Json(new { signedIn = true, alertClass = "success", alertMessage = "Mail added successfully" });
+                            return Json(new { signedIn = true, alertClass = "success", alertMessage = Resources.Resource.MailAddedSuccess });
                         else
                             return Json(new { signedIn = true, alertClass = "danger", alertMessage = "Saving mail in the database failed, contacts the administrator" });
                     }
                     else
-                        return Json(new { signedIn = true, alertClass = "warning", alertMessage = "Please fill in all required fields" });
+                        return Json(new { signedIn = true, alertClass = "warning", alertMessage = Resources.Resource.EmptyRequiredField });
                 }
                 catch
                 {
-                   return Json(new { signedIn = true, alertClass = "danger", alertMessage = "An error has occurred, contact the administrator" });
+                   return Json(new { signedIn = true, alertClass = "danger", alertMessage = Resources.Resource.Error });
                 }              
-
             }
             else
                 return Json(new { signedIn = false });
         }
 
         [HttpPost]
-        public string ViewMail()
+        public string ApplyOcr()
         {
             return "";            
         }

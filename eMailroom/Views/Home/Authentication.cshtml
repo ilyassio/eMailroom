@@ -10,7 +10,7 @@
 }
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="@System.Globalization.CultureInfo.CurrentCulture.Name">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -21,6 +21,22 @@
 
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark-blue">
         <a class="navbar-brand mb-0 h1" href="">eMailroom</a>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <div class="navbar-nav ml-auto mt-2 mt-lg-0 btn-group" role="group" aria-label="Basic example">
+                <div class="dropdown">
+                    <a class="nav-link btn btn-dark dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Change language
+                    </a>
+
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                        <a class="dropdown-item" href='@Url.Action("ChangeLanguage","Home", new { LangAbbr = "ar" })'>العربية </a>
+                        <a class="dropdown-item" href='@Url.Action("ChangeLanguage","Home", new { LangAbbr = "en" })'> English</a>
+                        <a class="dropdown-item" href='@Url.Action("ChangeLanguage","Home", new { LangAbbr = "fr" })'> Français</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </nav>
 
     <main class="mt-5">
@@ -29,28 +45,37 @@
                 @alertMessage
             </div>
             <form method="post" action="~/Home/Signin" class="mw-500px m-auto">
-                <div class="form-group">
-                    <label for="input-id">Id</label>
+                <div class="form-group text-right">
+                    <label for="input-id">@Resources.Resource.Id</label>
                     <input type="text" class="form-control" id="input-id" name="id" required autocomplete="bbb">
                 </div>
                 <div class="form-group mb-5">
-                    <label for="input-password">Password</label>
+                    <label for="input-password">@Resources.Resource.Password</label>
                     <input type="password" class="form-control" id="input-password" name="password" required autocomplete="aaa">
                 </div>
 
-                <button type="submit" class="btn btn-outline-primary btn-block">Sign in</button>
+                <button type="submit" class="btn btn-outline-primary btn-block">@Resources.Resource.SignIn</button>
             </form>
         </div>
     </main>
 
     <footer>
         <hr />
-        <p class="ml-3">&copy; @DateTime.Now.Year - OpenMail</p>
+        <p class="ml-3">&copy; @DateTime.Now.Year - eMailroom</p>
     </footer>
 
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
-    
+
+    <script>
+        var cultureInfo = '@System.Globalization.CultureInfo.CurrentCulture.Name';
+        if (cultureInfo == "ar") {
+            $('form').find('.form-group').addClass('text-right');
+        }
+        else {
+            $('form').find('.form-group').removeClass('text-right');
+        }
+    </script>
 </body>
 </html>

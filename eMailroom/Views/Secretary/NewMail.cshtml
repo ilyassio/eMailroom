@@ -5,14 +5,14 @@
 }
     
 <form id="form-new-mail" enctype="multipart/form-data">
-    <div id="new-mail-left" class="p-3 mr-5">
+    <div id="new-mail-left" class="p-3 mr-5 mt-2">
 
         <div class="input-group mb-3">
             <div class="input-group-prepend">
-                <span class="input-group-text" for="select-type-mail">Type</span>
+                <span class="input-group-text" for="select-type-mail">@Resources.Resource.Type</span>
             </div>
             <select class="form-control selectpicker" name="type" id="select-type" >
-                <option value="" selected>Choose...</option>
+                <option value="" selected>@Resources.Resource.ChooseSelect</option>
                 <option value="incoming">Incoming</option>
                 <option value="outgoing">Outgoing</option>
             </select>
@@ -20,61 +20,63 @@
 
         <div class="input-group mb-3">
             <div class="input-group-prepend">
-                <span class="input-group-text">Date</span>
+                <span class="input-group-text">@Resources.Resource.Date</span>
             </div>
             <input type="date" class="form-control" name="date" >
         </div>
 
         <div class="input-group mb-3">
             <div class="input-group-prepend">
-                <span class="input-group-text">Sender</span>
+                <span class="input-group-text">@Resources.Resource.Sender</span>
             </div>
             <select class="form-control selectpicker" id="select-sender" name="sender" data-live-search="true" header="true" >
-                <option value="" selected>Choose...</option>
+                <option value="" selected>@Resources.Resource.ChooseSelect</option>
             </select>
         </div>
 
         <div class="input-group mb-3">
             <div class="input-group-prepend">
-                <span class="input-group-text">Receiver</span>
+                <span class="input-group-text">@Resources.Resource.Receiver</span>
             </div>
             <select class="form-control selectpicker" id="select-receiver" name="receiver" data-live-search="true" >
-                <option value="" selected>Choose...</option>
+                <option value="" selected>@Resources.Resource.ChooseSelect</option>
             </select>
         </div>
 
         <div class="input-group mb-3">
             <div class="input-group-prepend">
-                <span class="input-group-text">Object</span>
+                <span class="input-group-text">@Resources.Resource.Object</span>
             </div>
-            <input type="text" class="form-control" id="input-object" name="object" placeholder="Optional" autocomplete="off">
+            <input type="text" class="form-control" id="input-object" name="object" placeholder="@Resources.Resource.Optional" autocomplete="off">
         </div>
 
         <div class="input-group">
             <div class="input-group-prepend">
-                <span class="input-group-text">Message</span>
+                <span class="input-group-text">@Resources.Resource.Message</span>
             </div>
             <textarea class="form-control" style="height: 290px;" autocomplete="off" name="message" ></textarea>
         </div>
 
-        <button type="submit" id="btn-add-mail" class="mt-3 btn btn-outline-primary btn-lg btn-block b">Add mail</button>
+        <button type="submit" id="btn-add-mail" class="mt-3 btn btn-outline-primary btn-lg btn-block b">@Resources.Resource.AddMail</button>
 
     </div>
     <div id="new-mail-right" class="p-1 overflow-hidden">
+
         <div id="div-ocr-view" class="">
 
         </div>
+
         <div class="drop-area mt-3" id="mail-upload">
-            <input class="drop-input" type="file" name="mail" id="input-mail" multiple>
-            <p class="drop-text" id="drop-text-mail">Click to select mail or just drop it here.</p>
+            <input class="drop-input" type="file" name="mail" id="input-mail" accept=".pdf">
+            <p class="drop-text" id="drop-text-mail">@Resources.Resource.MailUploadMsg</p>
             <div class="drop-button-group text-center">
-                <button id="btn-ocr" type="button" class="btn btn-dark position-relative drag-drop-button d-none">View with OCR</button>
+                <button id="btn-ocr" type="button" class="btn btn-dark position-relative drag-drop-button d-none">@Resources.Resource.ViewWithOcr</button>
             </div>
         </div>
 
         <div class="drop-area mt-3" id="attachements-upload">
-            <input class="drop-input" type="file" name="attachements[]" id="input-attachements" multiple>
-            <p class="drop-text" id="drop-text-attachements">Click to select attachements or just drop them here.</p>
+            <input class="drop-input" type="file" name="attachements[]" id="input-attachements" multiple accept=".pdf">
+            <p class="drop-text" id="drop-text-attachements">@Resources.Resource.AttachementsUploadMsg</p>
         </div>
 
     </div>
@@ -84,8 +86,7 @@
 
     window.onload = function () {
         $('#div-ocr-view').hide();
-
-        $("#menu-toggle").click();
-
+        //$("#menu-toggle").click();
     }
+
 </script>

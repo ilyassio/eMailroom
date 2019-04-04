@@ -1,5 +1,5 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
+<html lang="@System.Globalization.CultureInfo.CurrentCulture.Name">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -18,14 +18,14 @@
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <div class="navbar-nav ml-auto mt-2 mt-lg-0 btn-group" role="group" aria-label="Basic example">
-                <a role="button" href="#" data-toggle="modal" data-target="#modal-change-password" class="nav-link btn btn-dark"><i class="fas fa-key"></i> Change password</a>
-                <a role="button" href="~/Home/Signout" class="nav-link btn btn-dark"><i class="fas fa-sign-out-alt"></i> Sign out</a>
+                <a role="button" href="#" data-toggle="modal" data-target="#modal-settings" class="nav-link btn btn-dark"><i class="fas fa-cog"></i> @Resources.Resource.Settings</a>
+                <a role="button" href="~/Home/Signout" class="nav-link btn btn-dark"><i class="fas fa-sign-out-alt"></i> @Resources.Resource.SignOut</a>
             </div>
         </div>
     </nav>
     <div class="d-flex" id="wrapper">
         <div class="bg-light border-right" id="sidebar-wrapper">
-            <div class="list-group list-group-flush">
+            <div class="list-group list-group-flush" id="menu">
                 @Html.Partial("_Menu");
             </div>
         </div>
@@ -44,50 +44,106 @@
         </div>
     </div>
 
-    <div class="modal fade" id="modal-change-password" tabindex="-1" role="dialog" aria-labelledby="title-modal-change-password" aria-hidden="true">
-        <div class="modal-dialog" role="document">
+    <div class="modal fade" id="modal-settings" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="title-modal-change-password">Change password</h5>
+                    <h5 class="modal-title">@Resources.Resource.Settings</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    <div id="alert-change-password" role="alert">
+                    <button type="button" class="btn btn-block btn-secondary mb-4 text-left" data-toggle="collapse" data-target="#collapse-profil"> @Resources.Resource.Profile <i class="fas fa-chevron-down float-right mt-1"></i></button>
+                    <div class="collapse" id="collapse-profil">
+                        <form>
+                            <div id="alert-change-profil" role="alert">
 
+                            </div>
+                            <div class="form-group" id="myprofile">
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">@Resources.Resource.Id</span>
+                                    </div>
+                                    <input type="text" class="form-control" autocomplete="off" readonly>
+                                </div>
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">@Resources.Resource.Firstname</span>
+                                    </div>
+                                    <input type="text" class="form-control" autocomplete="off" readonly>
+                                </div>
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">@Resources.Resource.Lastname</span>
+                                    </div>
+                                    <input type="text" class="form-control" autocomplete="off" readonly>
+                                </div>
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">@Resources.Resource.Email</span>
+                                    </div>
+                                    <input type="email" class="form-control" name="email" autocomplete="off" id="input-email" readonly>
+                                    <div class="input-group-append">
+                                        <button class="btn btn-light btn-edit" id="azert" type="button"><i class="fas fa-edit"></i></button>
+                                    </div>
+                                </div>
+                                <div class="input-group mb-4">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">@Resources.Resource.Phone</span>
+                                    </div>
+                                    <input type="number" class="form-control" name="phone" autocomplete="off" id="input-phone" readonly>
+                                    <div class="input-group-append">
+                                        <button class="btn btn-light btn-edit" type="button"><i class="fas fa-edit"></i></button>
+                                    </div>
+                                </div>
+                                <button class="btn btn-outline-primary btn-block d-none" id="btn-edit-profile" type="submit">Modifier</button>
+                            </div>
+                        </form>
                     </div>
-                    <div class="form-group" id="inputs-change-password">
-                        <div class="collapse show" id="changePasswordCollapse" style="">
-                            <div class="input-group mb-3">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text label-integrated">Old password</span>
-                                </div>
-                                <input type="password" class="form-control" id="input-old-password" autocomplete="off">
-                            </div>
-                            <div class="input-group mb-3">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text label-integrated">New password</span>
-                                </div>
-                                <input type="password" class="form-control" id="input-new-password" autocomplete="off">
-                            </div>
-                            <div class="input-group mb-4">
-                                <div class="input-group-prepend">
-                                    <span class="input-group-text label-integrated">Confirm password</span>
-                                </div>
-                                <input type="password" class="form-control" id="input-confirm-password" autocomplete="off">
-                            </div>
+                    <hr>
+                    <button type="button" class="btn btn-block btn-secondary mb-4 text-left" data-toggle="collapse" data-target="#collapse-change-language"> @Resources.Resource.ChangeLanguage <i class="fas fa-chevron-down float-right mt-1"></i></button>
+                    <div class="collapse" id="collapse-change-language">
+                        <div class="list-group">
+                            <a href='@Url.Action("ChangeLanguage","Home", new { LangAbbr = "ar" })' class="list-group-item list-group-item-action text-right">العربية</a>
+                            <a href='@Url.Action("ChangeLanguage","Home", new { LangAbbr = "en" })' class="list-group-item list-group-item-action">English</a>
+                            <a href='@Url.Action("ChangeLanguage","Home", new { LangAbbr = "fr" })' class="list-group-item list-group-item-action">Français</a>
+                        </div>                  
+                    </div>
+                    <hr>
+                    <button type="button" class="btn btn-block btn-secondary mb-4 text-left" data-toggle="collapse" data-target="#collapse-change-password"> @Resources.Resource.ChangePassword <i class="fas fa-chevron-down float-right mt-1"></i></button>
+                    <div class="collapse" id="collapse-change-password">
+                        <form id="form-change-password">
+                            <div id="alert-change-password" role="alert">
 
-                        </div>
+                            </div>
+                            <div class="form-group" id="inputs-change-password">
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"> @Resources.Resource.OldPassword</span>
+                                    </div>
+                                    <input type="password" name="oldPassword" class="form-control" id="input-old-password" autocomplete="off">
+                                </div>
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text label-integrated"> @Resources.Resource.NewPassword</span>
+                                    </div>
+                                    <input type="password" name="newPassword" class="form-control" id="input-new-password" autocomplete="off">
+                                </div>
+                                <div class="input-group mb-4">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"> @Resources.Resource.ConfirmPassword</span>
+                                    </div>
+                                    <input type="password" name="confirmPassword" class="form-control" id="input-confirm-password" autocomplete="off">
+                                </div>
+                                <button class="btn btn-primary btn-block d-none" type="submit" id="btn-change-password"> @Resources.Resource.ChangePassword</button>
+                            </div>
+                        </form>
                     </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-primary btn-block" id="btn-change-password">Change password</button>
                 </div>
             </div>
         </div>
     </div>
-
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/popper")
@@ -96,7 +152,15 @@
     @RenderSection("scripts", required: false)
 
     <script>
-        var opened = 1;
+        MailUploadMsg = "@Resources.Resource.MailUploadMsg";
+        AttachementsUploadMsg = "@Resources.Resource.AttachementsUploadMsg";
+        EmptyRequiredField = "@Resources.Resource.EmptyRequiredField";
+        PasswordConfirmationError = "@Resources.Resource.PasswordConfirmationError";
+        SelectMoreThanOneFileError = "@Resources.Resource.SelectMoreThanOneFileError";
+        AddNewContact = "@Resources.Resource.AddNewContact";
+        ChooseSelect = "@Resources.Resource.ChooseSelect";
+
+        opened = 1;
         $("#menu-toggle").click(function (e) {
             e.preventDefault();
             $("#wrapper").toggleClass("toggled");
