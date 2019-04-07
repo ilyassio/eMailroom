@@ -9,7 +9,9 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using IronOcr;
-
+using IronSoftware;
+using IronPdf;
+using System.Diagnostics;
 
 namespace eMailroom.Controllers
 {
@@ -177,26 +179,63 @@ namespace eMailroom.Controllers
                         }
 
                         if (mail.Save())
-                            return Json(new { signedIn = true, alertClass = "success", alertMessage = Resources.Resource.MailAddedSuccess });
+                            return Json(new { session = true, alertClass = "success", alertMessage = Resources.Resource.MailAddedSuccess });
                         else
-                            return Json(new { signedIn = true, alertClass = "danger", alertMessage = "Saving mail in the database failed, contacts the administrator" });
+                            return Json(new { session = true, alertClass = "danger", alertMessage = "Saving mail in the database failed, contacts the administrator" });
                     }
                     else
-                        return Json(new { signedIn = true, alertClass = "warning", alertMessage = Resources.Resource.EmptyRequiredField });
+                        return Json(new { session = true, alertClass = "warning", alertMessage = Resources.Resource.EmptyRequiredField });
                 }
                 catch
                 {
-                   return Json(new { signedIn = true, alertClass = "danger", alertMessage = Resources.Resource.Error });
+                   return Json(new { session = true, alertClass = "danger", alertMessage = Resources.Resource.Error });
                 }              
             }
             else
-                return Json(new { signedIn = false });
+                return Json(new { session = false });
         }
 
         [HttpPost]
-        public string ApplyOcr()
+        public JsonResult ApplyOcr()
         {
-            return "";            
+            if (Session["EmployeeId"] != null && (string)Session["EmployeeType"] == "Secretary")
+            {
+                // View of the scaned document with OCR
+                
+                try
+                {
+                    string fileName = Path.ChangeExtension(Path.GetFileName(Request.Files["mail"].FileName), ".png");
+                    Stream fs = Request.Files["mail"].InputStream;
+                    PdfDocument PDF = new PdfDocument(fs);
+                    PDF.ToPngImages(Server.MapPath("\\Temp") + "\\mail_scan.png");
+
+                    // OCR with french dictionary (the user will choose the language of the document in next update)
+                    string cmd = "cmd /C \"\"" + Server.MapPath("\\Tesseract") + "\\Tesseract-OCR\\tesseract.exe\" --tessdata-dir \"" + Server.MapPath("\\Tesseract") + "\\tessdata\" \"" + Server.MapPath("\\Temp") + "\\mail_scan.png\" \"" + Server.MapPath("\\Temp") + "\\mail_scan\" -l fra pdf\"";
+                    Process p;
+                    p = new Process();
+                    string[] args = cmd.Split(new char[] { ' ' });
+                    p.StartInfo.FileName = args[0];
+                    int startPoint = cmd.IndexOf(' ');
+                    string s = cmd.Substring(startPoint, cmd.Length - startPoint);
+                    p.StartInfo.Arguments = s;
+                    p.StartInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
+                    p.StartInfo.RedirectStandardOutput = true;
+                    p.StartInfo.UseShellExecute = false;
+                    p.Start();
+                    string output = p.StandardOutput.ReadToEnd();
+                }
+                catch
+                {
+                    return Json(new { session = true, success = false, message = Resources.Resource.Error });
+                }
+
+                return Json(new { session = true, success = true, url = "http://" + Request.Url.Authority + "/Temp/mail_scan.pdf" });
+            }
+
+            return Json(new { session = false });
+
+            // Auto fill soon
+
         }
     }
 }

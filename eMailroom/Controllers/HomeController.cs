@@ -95,25 +95,25 @@ namespace eMailroom.Controllers
                 if (Request.Form["oldPassword"] != "" && Request.Form["newPassword"] != "" && Request.Form["confirmPassword"] != "")
                 {
                     if (Request.Form["newPassword"] != Request.Form["confirmPassword"])
-                        return Json(new { signedIn = true, alertClass = "danger", alertMessage = Resources.Resource.PasswordConfirmationError });
+                        return Json(new { session = true, alertClass = "danger", alertMessage = Resources.Resource.PasswordConfirmationError });
 
                     else
                     {
                         int res = employee.ChangePassword(Request.Form["oldPassword"], Request.Form["newPassword"]);
 
                         if (res == 1)
-                            return Json(new { signedIn = true, alertClass = "success", alertMessage = Resources.Resource.ChangePasswordSuccess });
+                            return Json(new { session = true, alertClass = "success", alertMessage = Resources.Resource.ChangePasswordSuccess });
                         else if (res == 0)
-                            return Json(new { signedIn = true, alertClass = "danger", alertMessage = Resources.Resource.OldPasswordError });
+                            return Json(new { session = true, alertClass = "danger", alertMessage = Resources.Resource.OldPasswordError });
                         else
-                            return Json(new { signedIn = true, alertClass = "danger", alertMessage = Resources.Resource.Error });
+                            return Json(new { session = true, alertClass = "danger", alertMessage = Resources.Resource.Error });
                     }
                 }
                 else
-                    return Json(new { signedIn = true, alertClass = "danger", alertMessage = Resources.Resource.EmptyRequiredField });
+                    return Json(new { session = true, alertClass = "danger", alertMessage = Resources.Resource.EmptyRequiredField });
             }
             else
-                return Json(new { signedIn = false });
+                return Json(new { session = false });
 
         }
 

@@ -57,7 +57,7 @@ $(document).ready(function (e) {
                 data: formData,
                 cache: false,
                 success: function (response) {
-                    if (!response.signedIn)
+                    if (!response.session)
                         window.location.reload(true);
                     else {
                         clearAll();
@@ -123,7 +123,7 @@ $(document).ready(function (e) {
             cache: false,
             success: function (response) {
                 
-                if (!response.signedIn) {
+                if (!response.session) {
                     window.location.reload(true);
                 }
                 else {
@@ -231,12 +231,20 @@ $(document).ready(function (e) {
                 data: fd,
                 cache: false,
                 success: function (response) {
-                    $('#mail-upload').hide();
-                    $('#attachements-upload').hide();
-                    $('#div-ocr-view').addClass('mt-5');
-                    $('#div-ocr-view').addClass('p-5');
-                    $('#div-ocr-view').show();
-                    $('#div-ocr-view').html(response);
+                    if (!response.session) {
+                        window.location.reload(true);
+                    } else {
+                        if (response.success) {
+                            $('#mail-upload').hide();
+                            $('#attachements-upload').hide();
+                            $('#div-ocr-view').removeClass('d-none');
+                            $('#iframe-mail').attr("src", response.url);
+                        }
+                        else
+                        {
+                            alert(response.message);
+                        }
+                    }
                 },
                 contentType: false,
                 processData: false
@@ -263,4 +271,20 @@ $(document).ready(function (e) {
     $(".btn-edit").on('click', function () {
         $(this).parents('div').prev().removeAttr('readonly');
     });
+
+    $("#btn-mail-return").on('click', function () {
+        $('#iframe-mail').removeAttr("src");
+        $('#iframe-mail').refresh;
+        $('#div-ocr-view').addClass('d-none');
+        $('#mail-upload').show();
+        $('#attachements-upload').show();
+        
+        
+    });
+
+    $("#btn-mail-autoFill").on('click', function () {
+        alert("Not done yet!");
+    });
+
+
 });

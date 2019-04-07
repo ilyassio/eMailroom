@@ -13,8 +13,8 @@
             </div>
             <select class="form-control selectpicker" name="type" id="select-type" >
                 <option value="" selected>@Resources.Resource.ChooseSelect</option>
-                <option value="incoming">Incoming</option>
-                <option value="outgoing">Outgoing</option>
+                <option value="incoming">@Resources.Resource.Incoming</option>
+                <option value="outgoing">@Resources.Resource.Outgoing</option>
             </select>
         </div>
 
@@ -62,8 +62,12 @@
     </div>
     <div id="new-mail-right" class="p-1 overflow-hidden">
 
-        <div id="div-ocr-view" class="">
-
+        <div id="div-ocr-view" class="d-none">
+            <iframe id="iframe-mail"></iframe>
+            <div class="btn-group w-100" role="group" aria-label="Basic example">
+                <button type="button" id="btn-mail-return" class="btn btn-block btn-secondary btn-sm mt-0">@Resources.Resource.Return</button>
+                <button type="button" id="btn-mail-autoFill" class="btn btn-block btn-secondary btn-sm mt-0">@Resources.Resource.AutoFill</button>
+            </div>
         </div>
 
         <div class="drop-area mt-3" id="mail-upload">
@@ -81,12 +85,3 @@
 
     </div>
 </form>
-
-<script type="text/javascript">
-
-    window.onload = function () {
-        $('#div-ocr-view').hide();
-        //$("#menu-toggle").click();
-    }
-
-</script>
