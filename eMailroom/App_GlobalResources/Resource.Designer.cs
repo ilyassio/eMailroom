@@ -88,6 +88,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Arabic.
+        /// </summary>
+        internal static string Arabic {
+            get {
+                return ResourceManager.GetString("Arabic", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Click to select attachements or just drop them here..
         /// </summary>
         internal static string AttachementsUploadMsg {
@@ -205,6 +214,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to English.
+        /// </summary>
+        internal static string English {
+            get {
+                return ResourceManager.GetString("English", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to An error has occurred, contact the administrator.
         /// </summary>
         internal static string Error {
@@ -219,6 +237,15 @@ namespace Resources {
         internal static string Firstname {
             get {
                 return ResourceManager.GetString("Firstname", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to French.
+        /// </summary>
+        internal static string French {
+            get {
+                return ResourceManager.GetString("French", resourceCulture);
             }
         }
         
@@ -273,6 +300,15 @@ namespace Resources {
         internal static string MailAddedSuccess {
             get {
                 return ResourceManager.GetString("MailAddedSuccess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Mail language.
+        /// </summary>
+        internal static string MailLang {
+            get {
+                return ResourceManager.GetString("MailLang", resourceCulture);
             }
         }
         

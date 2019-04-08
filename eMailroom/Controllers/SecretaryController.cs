@@ -9,9 +9,9 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using IronOcr;
-using IronSoftware;
 using IronPdf;
 using System.Diagnostics;
+using System.Drawing;
 
 namespace eMailroom.Controllers
 {
@@ -200,42 +200,112 @@ namespace eMailroom.Controllers
         {
             if (Session["EmployeeId"] != null && (string)Session["EmployeeType"] == "Secretary")
             {
-                // View of the scaned document with OCR
+                if (new[] { "ara", "eng", "fra" }.Contains(Request.Form["lang"]) )
+                {
+                    Session["MailLanguage"] = Request.Form["lang"];
+
+                    try
+                    {
+                        string fileName = Path.ChangeExtension(Path.GetFileName(Request.Files["mail"].FileName), ".png");
+                        Stream fs = Request.Files["mail"].InputStream;
+                        PdfDocument PDF = new PdfDocument(fs);
+                        PDF.ToPngImages(Server.MapPath("\\Temp") + "\\mail_scan.png");
+                        
+                        string cmd = "cmd /C \"\"" + Server.MapPath("\\Tesseract") + "\\Tesseract-OCR\\tesseract.exe\" --tessdata-dir \"" + Server.MapPath("\\Tesseract") + "\\tessdata\" \"" + Server.MapPath("\\Temp") + "\\mail_scan.png\" \"" + Server.MapPath("\\Temp") + "\\mail_scan\" -l "+ Request.Form["lang"] + " pdf\"";
+                        Process p;
+                        p = new Process();
+                        string[] args = cmd.Split(new char[] { ' ' });
+                        p.StartInfo.FileName = args[0];
+                        int startPoint = cmd.IndexOf(' ');
+                        string s = cmd.Substring(startPoint, cmd.Length - startPoint);
+                        p.StartInfo.Arguments = s;
+                        p.StartInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
+                        p.StartInfo.RedirectStandardOutput = true;
+                        p.StartInfo.UseShellExecute = false;
+                        p.Start();
+                        string output = p.StandardOutput.ReadToEnd();
+                        p.Dispose();
+                    }
+                    catch
+                    {
+                        return Json(new { session = true, success = false, message = Resources.Resource.Error });
+                    }
+
+                    return Json(new { session = true, success = true, url = "http://" + Request.Url.Authority + "/Temp/mail_scan.pdf" });
+                }
                 
+                return Json(new { session = true, success = false, message = Resources.Resource.Error });
+            }
+
+            return Json(new { session = false });
+        }
+
+        public JsonResult AutoFill()
+        {
+            if (Session["EmployeeId"] != null && (string)Session["EmployeeType"] == "Secretary")
+            {
+                string mailDate = "";
+                string mailObject = "";
+                string mailMessage = "";
+
+                Bitmap mailImg = new Bitmap(Server.MapPath("\\Temp\\mail_scan.png"));
+                Bitmap CroppedImage;
+
+                // Date
+                CroppedImage = mailImg.Clone(new System.Drawing.Rectangle(572, 13, 608, 130), mailImg.PixelFormat); // X, Y, Width, Height
+                CroppedImage.Save(Server.MapPath("\\Temp\\mail_scan_date.png"));
+
+                // Object
+                CroppedImage = mailImg.Clone(new System.Drawing.Rectangle(8, 408, 1167, 90), mailImg.PixelFormat);
+                CroppedImage.Save(Server.MapPath("\\Temp\\mail_scan_object.png"));
+
+                // Message
+                CroppedImage = mailImg.Clone(new System.Drawing.Rectangle(8, 504, 1167, 800), mailImg.PixelFormat);
+                CroppedImage.Save(Server.MapPath("\\Temp\\mail_scan_message.png"));
                 try
                 {
-                    string fileName = Path.ChangeExtension(Path.GetFileName(Request.Files["mail"].FileName), ".png");
-                    Stream fs = Request.Files["mail"].InputStream;
-                    PdfDocument PDF = new PdfDocument(fs);
-                    PDF.ToPngImages(Server.MapPath("\\Temp") + "\\mail_scan.png");
+                    foreach (string CroppedImageName in new List<string> { "mail_scan_date", "mail_scan_object", "mail_scan_message" })
+                    {
 
-                    // OCR with french dictionary (the user will choose the language of the document in next update)
-                    string cmd = "cmd /C \"\"" + Server.MapPath("\\Tesseract") + "\\Tesseract-OCR\\tesseract.exe\" --tessdata-dir \"" + Server.MapPath("\\Tesseract") + "\\tessdata\" \"" + Server.MapPath("\\Temp") + "\\mail_scan.png\" \"" + Server.MapPath("\\Temp") + "\\mail_scan\" -l fra pdf\"";
-                    Process p;
-                    p = new Process();
-                    string[] args = cmd.Split(new char[] { ' ' });
-                    p.StartInfo.FileName = args[0];
-                    int startPoint = cmd.IndexOf(' ');
-                    string s = cmd.Substring(startPoint, cmd.Length - startPoint);
-                    p.StartInfo.Arguments = s;
-                    p.StartInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
-                    p.StartInfo.RedirectStandardOutput = true;
-                    p.StartInfo.UseShellExecute = false;
-                    p.Start();
-                    string output = p.StandardOutput.ReadToEnd();
+                        string cmd = "cmd /C \"\"" + Server.MapPath("\\Tesseract") + "\\Tesseract-OCR\\tesseract.exe\" --tessdata-dir \"" + Server.MapPath("\\Tesseract") + "\\tessdata\" \"" + Server.MapPath("\\Temp") + "\\" + CroppedImageName + ".png\" \"" + Server.MapPath("\\Temp") + "\\" + CroppedImageName + "\" -l " + (string)Session["MailLanguage"] + " txt\"";
+
+                        Process p = new Process();
+                        string[] args = cmd.Split(new char[] { ' ' });
+                        p.StartInfo.FileName = args[0];
+                        int startPoint = cmd.IndexOf(' ');
+                        string s = cmd.Substring(startPoint, cmd.Length - startPoint);
+                        p.StartInfo.Arguments = s;
+                        p.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                        p.StartInfo.RedirectStandardOutput = true;
+                        p.StartInfo.UseShellExecute = false;
+                        p.Start();
+                        string output = p.StandardOutput.ReadToEnd();
+                        p.Dispose();
+
+                    }
+
+
+                    mailDate = System.IO.File.ReadAllText(Server.MapPath("\\Temp\\mail_scan_date.txt"));
+                    int index = mailDate.IndexOf("/")-2;
+                    mailDate = mailDate.Substring(index, 10);
+                    mailDate = (DateTime.ParseExact(mailDate, "dd/mm/yyyy", null)).ToString("yyyy-mm-dd");
+
+                    mailObject = System.IO.File.ReadAllText(Server.MapPath("\\Temp\\mail_scan_object.txt")).Replace("Objet :", "");
+
+                    mailMessage = System.IO.File.ReadAllText(Server.MapPath("\\Temp\\mail_scan_message.txt"));
+                    mailMessage = mailMessage.Replace("\n\n", "-double-space-here-");
+                    mailMessage = mailMessage.Replace("\n", " ");
+                    mailMessage = mailMessage.Replace("-double-space-here-", "\n\n");
+
+                    return Json(new { session = true, success = true, mailDate, mailObject, mailMessage });
                 }
                 catch
                 {
                     return Json(new { session = true, success = false, message = Resources.Resource.Error });
                 }
-
-                return Json(new { session = true, success = true, url = "http://" + Request.Url.Authority + "/Temp/mail_scan.pdf" });
             }
-
-            return Json(new { session = false });
-
-            // Auto fill soon
-
+            else
+                return Json(new { session = false });
         }
     }
 }

@@ -218,38 +218,40 @@ $(document).ready(function (e) {
 
     });
 
-    $('#btn-ocr').on('click', function () {
-        if ($('#input-mail')[0].files[0].value) {
-            alert(document.getElementById("input-mail").files[0].value)
-        }
-        else {
-            var fd = new FormData();
-            fd.append("mail", document.getElementById("input-mail").files[0]);
-            $.ajax({
-                url: 'ApplyOcr',
-                type: 'POST',
-                data: fd,
-                cache: false,
-                success: function (response) {
-                    if (!response.session) {
-                        window.location.reload(true);
-                    } else {
-                        if (response.success) {
-                            $('#mail-upload').hide();
-                            $('#attachements-upload').hide();
-                            $('#div-ocr-view').removeClass('d-none');
-                            $('#iframe-mail').attr("src", response.url);
-                        }
-                        else
-                        {
-                            alert(response.message);
-                        }
+    $('.btn-ocr').on('click', function () {
+        $('#dropdown-ocr').addClass('d-none');
+        $('#spinner').removeClass('d-none');
+        var fd = new FormData();
+        fd.append("mail", document.getElementById("input-mail").files[0]);
+        fd.append("lang", $(this).attr('data-lang'));
+        $.ajax({
+            url: 'ApplyOcr',
+            type: 'POST',
+            data: fd,
+            cache: false,
+            success: function (response) {
+                if (!response.session) {
+                    window.location.reload(true);
+                } else {
+                    if (response.success) {
+                        $('#mail-upload').hide();
+                        $('#attachements-upload').hide();
+                        $('#div-ocr-view').removeClass('d-none');
+                        $('#iframe-mail').attr("src", response.url);
                     }
-                },
-                contentType: false,
-                processData: false
-            });    
-        }
+                    else
+                    {
+                        alert(response.message);
+                    }
+                    $('#dropdown-ocr').removeClass('d-none');
+                    $('#spinner').addClass('d-none');
+                }
+            },
+            contentType: false,
+            processData: false
+        });
+        
+        
     });
 
     $('#inputs-change-password input').on('keyup', function () {
@@ -283,8 +285,24 @@ $(document).ready(function (e) {
     });
 
     $("#btn-mail-autoFill").on('click', function () {
-        alert("Not done yet!");
+        $.post(
+            'AutoFill',
+            function (response) {
+                if (!response.session)
+                    window.location.reload(true);
+                else if (!response.success)
+                    alert(response.message);
+                else {
+                    $('#input-object').val(response.mailObject);
+                    $('#input-message').val(response.mailMessage);
+                    $('#input-date').val(response.mailDate);
+
+                    alert("---"+response.mailDate);
+                }
+            }
+
+        );
     });
 
-
+    
 });

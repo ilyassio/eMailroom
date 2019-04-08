@@ -264,4 +264,16 @@
   <data name="Return" xml:space="preserve">
     <value>الرجوع</value>
   </data>
+  <data name="Arabic" xml:space="preserve">
+    <value>العربية</value>
+  </data>
+  <data name="English" xml:space="preserve">
+    <value>الإنجليزية</value>
+  </data>
+  <data name="French" xml:space="preserve">
+    <value>الفرنسية</value>
+  </data>
+  <data name="MailLang" xml:space="preserve">
+    <value> لغة البريد</value>
+  </data>
 </root>

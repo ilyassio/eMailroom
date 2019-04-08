@@ -50,6 +50,12 @@
     <Reference Include="IronOcr, Version=4.4.0.21181, Culture=neutral, PublicKeyToken=5f366048dc436899, processorArchitecture=MSIL">
       <HintPath>..\packages\IronOcr.4.4.0\lib\net40\IronOcr.dll</HintPath>
     </Reference>
+    <Reference Include="IronOcr.Arabic, Version=4.4.4.18393, Culture=neutral, PublicKeyToken=5f366048dc436899, processorArchitecture=MSIL">
+      <HintPath>..\packages\IronOcr.Languages.Arabic.4.4.4.11\lib\net40\IronOcr.Arabic.dll</HintPath>
+    </Reference>
+    <Reference Include="IronOcr.French, Version=4.0.0.20729, Culture=neutral, PublicKeyToken=5f366048dc436899, processorArchitecture=MSIL">
+      <HintPath>..\packages\IronOcr.Languages.French.4.4.4.2\lib\net40\IronOcr.French.dll</HintPath>
+    </Reference>
     <Reference Include="IronPdf, Version=5.2.0.22321, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\IronPdf.5.2.0.1\lib\net40\IronPdf.dll</HintPath>
     </Reference>
@@ -155,6 +161,7 @@
     <Compile Include="Models\Contact.cs" />
     <Compile Include="Models\Database.cs" />
     <Compile Include="Models\Employee.cs" />
+    <Compile Include="Models\Helper.cs" />
     <Compile Include="Models\Mail.cs" />
     <Compile Include="Models\Person.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

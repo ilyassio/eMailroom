@@ -22,7 +22,7 @@
             <div class="input-group-prepend">
                 <span class="input-group-text">@Resources.Resource.Date</span>
             </div>
-            <input type="date" class="form-control" name="date" >
+            <input type="date" class="form-control" name="date" id="input-date">
         </div>
 
         <div class="input-group mb-3">
@@ -54,7 +54,7 @@
             <div class="input-group-prepend">
                 <span class="input-group-text">@Resources.Resource.Message</span>
             </div>
-            <textarea class="form-control" style="height: 290px;" autocomplete="off" name="message" ></textarea>
+            <textarea class="form-control" style="height: 290px;" autocomplete="off" name="message" id="input-message" ></textarea>
         </div>
 
         <button type="submit" id="btn-add-mail" class="mt-3 btn btn-outline-primary btn-lg btn-block b">@Resources.Resource.AddMail</button>
@@ -74,7 +74,18 @@
             <input class="drop-input" type="file" name="mail" id="input-mail" accept=".pdf">
             <p class="drop-text" id="drop-text-mail">@Resources.Resource.MailUploadMsg</p>
             <div class="drop-button-group text-center">
-                <button id="btn-ocr" type="button" class="btn btn-dark position-relative drag-drop-button d-none">@Resources.Resource.ViewWithOcr</button>
+                <span id="spinner" class="spinner-border spinner-border d-none" role="status" aria-hidden="true"></span>
+                <div class="dropdown" id="dropdown-ocr">
+                    <button class="btn btn-dark position-relative drag-drop-button d-none" type="button" id="btn-ocr" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        @Resources.Resource.ViewWithOcr
+                    </button>
+                    <div class="dropdown-menu" id="ocr-dropdown-menu">
+                        <span class="dropdown-item-text">@Resources.Resource.MailLang</span>
+                        <a class="dropdown-item btn-ocr" data-lang="ara" href="#">@Resources.Resource.Arabic</a>
+                        <a class="dropdown-item btn-ocr" data-lang="eng" href="#">@Resources.Resource.English</a>
+                        <a class="dropdown-item btn-ocr" data-lang="fra" href="#">@Resources.Resource.French</a>
+                    </div>
+                </div>
             </div>
         </div>
 

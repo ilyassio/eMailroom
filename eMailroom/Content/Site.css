@@ -157,3 +157,13 @@ button.dropdown-toggle {
     height: 700px;
 }
 
+#btn-ocr {
+    width: 184px;
+}
+
+#ocr-dropdown-menu {
+    min-width: max-content;
+    width: 184px;
+}
+
+
