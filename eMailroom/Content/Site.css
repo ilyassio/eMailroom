@@ -166,4 +166,11 @@ button.dropdown-toggle {
     width: 184px;
 }
 
+#add-mail-spinner {
+    width: 1.5rem;
+    height: 1.5rem;
+}
 
+.mail-line:hover {
+    cursor: pointer;
+}

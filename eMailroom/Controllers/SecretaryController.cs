@@ -8,7 +8,6 @@ using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using IronOcr;
 using IronPdf;
 using System.Diagnostics;
 using System.Drawing;
@@ -22,7 +21,7 @@ namespace eMailroom.Controllers
             if (Session["EmployeeId"] == null || (string)Session["EmployeeType"] != "Secretary")
                 return RedirectToAction("Authentication", "Home");
             else
-                return RedirectToAction("Tasks");
+                return RedirectToAction("NewMail");
         }
 
         public ActionResult Mails()
@@ -30,7 +29,10 @@ namespace eMailroom.Controllers
             if (Session["EmployeeId"] == null || (string)Session["EmployeeType"] != "Secretary")
                 return RedirectToAction("Authentication", "Home");
             else
+            {
+                ViewData["mails"] = Mail.GetMails((string)Session["EmployeeId"]);
                 return View();
+            }
         }
 
         public ActionResult NewMail()
@@ -58,14 +60,6 @@ namespace eMailroom.Controllers
         }
 
         public ActionResult Employees()
-        {
-            if (Session["EmployeeId"] == null || (string)Session["EmployeeType"] != "Secretary")
-                return RedirectToAction("Authentication", "Home");
-            else
-                return View();
-        }
-
-        public ActionResult Tasks()
         {
             if (Session["EmployeeId"] == null || (string)Session["EmployeeType"] != "Secretary")
                 return RedirectToAction("Authentication", "Home");
@@ -113,13 +107,15 @@ namespace eMailroom.Controllers
         [HttpPost]
         public JsonResult AddMail()
         {
+            foreach (FileInfo file in new DirectoryInfo(Server.MapPath("\\Temp")).GetFiles())
+                file.Delete();
+
             if (Session["EmployeeId"] != null && (string)Session["EmployeeType"] == "Secretary")
             {
                 try
                 {
                     if (Request.Form["type"] != "" && Request.Form["date"] != "" && Request.Form["sender"] != "" && Request.Form["receiver"] != "" && Request.Form["message"] != "")
                     {
-
                         byte[] fileBytes = null;
                         string fileName = null;
                         Stream fs = null;
@@ -127,19 +123,19 @@ namespace eMailroom.Controllers
 
                         try
                         {
-                            if (Request.Files["mail"].ContentLength > 0 && Path.GetExtension(Request.Files["mail"].FileName).ToUpper() == ".PDF")
+                            if (Request.Files["mail"].ContentLength > 0 && new[] { ".JPEG", ".JPG", ".PNG", ".PDF" }.Contains(Path.GetExtension(Request.Files["mail"].FileName).ToUpper()) )
                             {
                                 fileName = Path.GetFileName(Request.Files["mail"].FileName);
                                 fs = Request.Files["mail"].InputStream;
                                 br = new BinaryReader(fs);
                                 fileBytes = br.ReadBytes((Int32)fs.Length);
                             }
+                            
                         }
                         catch
                         {
                             fileName = null;
                             fileBytes = null;
-
                         }
                         finally
                         {
@@ -149,13 +145,13 @@ namespace eMailroom.Controllers
                                 br.Close();
                         }
 
-                        Mail mail = new Mail(Request.Form["type"], Request.Form["date"], Request.Form["sender"], Request.Form["receiver"], Request.Form["object"], Request.Form["message"], fileName, fileBytes);
+                        Mail mail = new Mail(Request.Form["type"], Request.Form["date"], Request.Form["sender"], Request.Form["receiver"], Request.Form["subject"], Request.Form["message"], fileName, fileBytes);
 
                         foreach (HttpPostedFileBase attachement in Request.Files.GetMultiple("attachements[]"))
                         {
                             try
                             {
-                                if (attachement.ContentLength > 0 && Path.GetExtension(attachement.FileName).ToUpper() == ".PDF")
+                                if (attachement.ContentLength > 0 && new[] { ".JPEG", ".JPG", ".PNG", ".PDF" }.Contains(Path.GetExtension(attachement.FileName).ToUpper()))
                                 {
                                     fileName = Path.GetFileName(attachement.FileName);
                                     fs = attachement.InputStream;
@@ -188,7 +184,7 @@ namespace eMailroom.Controllers
                 }
                 catch
                 {
-                   return Json(new { session = true, alertClass = "danger", alertMessage = Resources.Resource.Error });
+                    return Json(new { session = true, alertClass = "danger", alertMessage = Resources.Resource.Error });
                 }              
             }
             else
@@ -200,31 +196,22 @@ namespace eMailroom.Controllers
         {
             if (Session["EmployeeId"] != null && (string)Session["EmployeeType"] == "Secretary")
             {
-                if (new[] { "ara", "eng", "fra" }.Contains(Request.Form["lang"]) )
+                if ( new[] { "ara", "eng", "fra" }.Contains(Request.Form["lang"]) )
                 {
                     Session["MailLanguage"] = Request.Form["lang"];
 
                     try
                     {
-                        string fileName = Path.ChangeExtension(Path.GetFileName(Request.Files["mail"].FileName), ".png");
-                        Stream fs = Request.Files["mail"].InputStream;
-                        PdfDocument PDF = new PdfDocument(fs);
-                        PDF.ToPngImages(Server.MapPath("\\Temp") + "\\mail_scan.png");
-                        
+                        if (Path.GetExtension(Request.Files["mail"].FileName).ToUpper() == ".PDF")
+                            new PdfDocument(Request.Files["mail"].InputStream).ToPngImages(Server.MapPath("\\Temp") + "\\mail_scan.png");
+                        else if (new[] { ".JPEG", ".JPG", ".PNG" }.Contains(Path.GetExtension(Request.Files["mail"].FileName).ToUpper()))
+                            Image.FromStream(Request.Files["mail"].InputStream).Save(Server.MapPath("\\Temp") + "\\mail_scan.png");
+                        else
+                            return Json(new { session = true, success = false, message = Resources.Resource.ErrorUploadedFileType });
+
                         string cmd = "cmd /C \"\"" + Server.MapPath("\\Tesseract") + "\\Tesseract-OCR\\tesseract.exe\" --tessdata-dir \"" + Server.MapPath("\\Tesseract") + "\\tessdata\" \"" + Server.MapPath("\\Temp") + "\\mail_scan.png\" \"" + Server.MapPath("\\Temp") + "\\mail_scan\" -l "+ Request.Form["lang"] + " pdf\"";
-                        Process p;
-                        p = new Process();
-                        string[] args = cmd.Split(new char[] { ' ' });
-                        p.StartInfo.FileName = args[0];
-                        int startPoint = cmd.IndexOf(' ');
-                        string s = cmd.Substring(startPoint, cmd.Length - startPoint);
-                        p.StartInfo.Arguments = s;
-                        p.StartInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
-                        p.StartInfo.RedirectStandardOutput = true;
-                        p.StartInfo.UseShellExecute = false;
-                        p.Start();
-                        string output = p.StandardOutput.ReadToEnd();
-                        p.Dispose();
+                        Tesseract.Run(cmd);
+                        
                     }
                     catch
                     {
@@ -252,38 +239,26 @@ namespace eMailroom.Controllers
                 Bitmap CroppedImage;
 
                 // Date
-                CroppedImage = mailImg.Clone(new System.Drawing.Rectangle(572, 13, 608, 130), mailImg.PixelFormat); // X, Y, Width, Height
+                CroppedImage = mailImg.Clone(new Rectangle(572, 13, 608, 130), mailImg.PixelFormat); // X, Y, Width, Height
                 CroppedImage.Save(Server.MapPath("\\Temp\\mail_scan_date.png"));
 
                 // Object
-                CroppedImage = mailImg.Clone(new System.Drawing.Rectangle(8, 408, 1167, 90), mailImg.PixelFormat);
+                CroppedImage = mailImg.Clone(new Rectangle(8, 408, 1167, 90), mailImg.PixelFormat);
                 CroppedImage.Save(Server.MapPath("\\Temp\\mail_scan_object.png"));
 
                 // Message
-                CroppedImage = mailImg.Clone(new System.Drawing.Rectangle(8, 504, 1167, 800), mailImg.PixelFormat);
+                CroppedImage = mailImg.Clone(new Rectangle(8, 504, 1167, 800), mailImg.PixelFormat);
                 CroppedImage.Save(Server.MapPath("\\Temp\\mail_scan_message.png"));
+
+                mailImg.Dispose();
+
                 try
                 {
                     foreach (string CroppedImageName in new List<string> { "mail_scan_date", "mail_scan_object", "mail_scan_message" })
                     {
-
                         string cmd = "cmd /C \"\"" + Server.MapPath("\\Tesseract") + "\\Tesseract-OCR\\tesseract.exe\" --tessdata-dir \"" + Server.MapPath("\\Tesseract") + "\\tessdata\" \"" + Server.MapPath("\\Temp") + "\\" + CroppedImageName + ".png\" \"" + Server.MapPath("\\Temp") + "\\" + CroppedImageName + "\" -l " + (string)Session["MailLanguage"] + " txt\"";
-
-                        Process p = new Process();
-                        string[] args = cmd.Split(new char[] { ' ' });
-                        p.StartInfo.FileName = args[0];
-                        int startPoint = cmd.IndexOf(' ');
-                        string s = cmd.Substring(startPoint, cmd.Length - startPoint);
-                        p.StartInfo.Arguments = s;
-                        p.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
-                        p.StartInfo.RedirectStandardOutput = true;
-                        p.StartInfo.UseShellExecute = false;
-                        p.Start();
-                        string output = p.StandardOutput.ReadToEnd();
-                        p.Dispose();
-
+                        Tesseract.Run(cmd);
                     }
-
 
                     mailDate = System.IO.File.ReadAllText(Server.MapPath("\\Temp\\mail_scan_date.txt"));
                     int index = mailDate.IndexOf("/")-2;
@@ -307,5 +282,26 @@ namespace eMailroom.Controllers
             else
                 return Json(new { session = false });
         }
+
+        [HttpPost]
+        public ActionResult SearchMails()
+        {
+            if (Session["EmployeeId"] != null && (string)Session["EmployeeType"] == "Secretary")
+            {
+                string type = Request.Form["type"];
+                string date = Request.Form["date"];
+                string entryDate = Request.Form["entryDate"];
+                string idSender = Request.Form["sender"];
+                string idReceiver = Request.Form["receiver"];
+                string subject = Request.Form["subject"];
+                string message = Request.Form["message"];
+
+                ViewData["mails"] = Mail.GetMails((string)Session["EmployeeId"], type, date, entryDate, idSender, idReceiver, subject, message);
+                return View("mails");
+            }
+            else
+                return RedirectToAction("Index");
+        }
+
     }
 }

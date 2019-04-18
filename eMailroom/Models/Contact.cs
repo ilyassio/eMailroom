@@ -27,8 +27,12 @@ namespace eMailroom.Models
                     Gender = reader.GetString(3)[0];
                     Phone = reader.GetString(4);
                     Email = reader.GetString(5);
-                    Company = new Company(reader.GetInt32(6));
-                    Position = reader.GetString(7);
+                    if (reader.GetValue(6) != null)
+                    {
+                        Company = new Company(reader.GetInt32(6));
+                        Position = reader.GetString(7);
+                    }
+                    
                     
                 }
                 catch

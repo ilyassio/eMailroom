@@ -121,10 +121,10 @@
     <value>Compte</value>
   </data>
   <data name="AddMail" xml:space="preserve">
-    <value>Ajouter courier</value>
+    <value>Ajouter courrier</value>
   </data>
   <data name="AttachementsUploadMsg" xml:space="preserve">
-    <value>Cliquez pour sélectionner les pièces jointes ou juste déposez-les ici.</value>
+    <value>Cliquez pour selectionner les pieces jointes ou juste deposez-les ici.</value>
   </data>
   <data name="ChangeLanguage" xml:space="preserve">
     <value>Changer la langue</value>
@@ -198,7 +198,7 @@
   <data name="NewPassword" xml:space="preserve">
     <value>Nouveau mot de passe</value>
   </data>
-  <data name="Object" xml:space="preserve">
+  <data name="Subject" xml:space="preserve">
     <value>Objet</value>
   </data>
   <data name="OldPassword" xml:space="preserve">

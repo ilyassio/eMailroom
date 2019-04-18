@@ -10,7 +10,7 @@ namespace eMailroom.Models
 {
     public static class Database
     {
-        private static readonly string StringConnection = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=" + HttpContext.Current.Server.MapPath("~/App_Data/eMailroomDatabase.mdf") + ";Integrated Security=True";
+        private static readonly string StringConnection = @"Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=" + HttpContext.Current.Server.MapPath("~/App_Data/eMailroom.mdf") + ";Integrated Security=True";
         public static SqlConnection Cnx;
         public static SqlCommand Cmd;
         public static SqlDataReader reader;

@@ -232,6 +232,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Uploaded file type is not supported. (Supported files : PDF, JPG, JPEG, PNG).
+        /// </summary>
+        internal static string ErrorUploadedFileType {
+            get {
+                return ResourceManager.GetString("ErrorUploadedFileType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Firstname.
         /// </summary>
         internal static string Firstname {
@@ -367,15 +376,6 @@ namespace Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Object.
-        /// </summary>
-        internal static string Object {
-            get {
-                return ResourceManager.GetString("Object", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Old password.
         /// </summary>
         internal static string OldPassword {
@@ -507,6 +507,15 @@ namespace Resources {
         internal static string SignOut {
             get {
                 return ResourceManager.GetString("SignOut", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Subject.
+        /// </summary>
+        internal static string Subject {
+            get {
+                return ResourceManager.GetString("Subject", resourceCulture);
             }
         }
         

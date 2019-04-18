@@ -16,6 +16,8 @@ $(document).ready(function (e) {
         $('#select-sender').selectpicker('refresh');
         $('#select-receiver').selectpicker('refresh');
         $('#select-type').selectpicker('refresh');
+        $('#add-mail-text').removeClass('d-none');
+        $('#add-mail-spinner').addClass('d-none');
     }
     function refreshInputsChangePassword() {
         $('#input-confirm-password').removeClass('is-invalid');
@@ -112,9 +114,10 @@ $(document).ready(function (e) {
 
     $("#form-new-mail").submit(function (e) {
 
+        $('#add-mail-text').addClass('d-none');
+        $('#add-mail-spinner').removeClass('d-none');
         e.preventDefault();
         var formData = new FormData(this);
-        refresh();
 
         $.ajax({
             url: 'AddMail',
@@ -127,6 +130,7 @@ $(document).ready(function (e) {
                     window.location.reload(true);
                 }
                 else {
+                    refresh();
                     $("#main-alert").addClass("alert");
                     $('#form-new-mail').find("input").val("");
                     $("#main-alert").addClass("alert-" + response.alertClass);
@@ -138,8 +142,10 @@ $(document).ready(function (e) {
                         $("#main-alert").html('<i class="fas fa-exclamation"></i> ' + response.alertMessage);
                         $("#main-alert").effect("shake");
                     }
-                    else
+                    else {
                         $("#main-alert").html('<i class="fas fa-check"></i> ' + response.alertMessage);
+                        $("#main-alert").effect("shake");
+                    }
                 }
             },
             contentType: false,
@@ -220,7 +226,7 @@ $(document).ready(function (e) {
 
     $('.btn-ocr').on('click', function () {
         $('#dropdown-ocr').addClass('d-none');
-        $('#spinner').removeClass('d-none');
+        $('#spinner-ocr').removeClass('d-none');
         var fd = new FormData();
         fd.append("mail", document.getElementById("input-mail").files[0]);
         fd.append("lang", $(this).attr('data-lang'));
@@ -244,7 +250,7 @@ $(document).ready(function (e) {
                         alert(response.message);
                     }
                     $('#dropdown-ocr').removeClass('d-none');
-                    $('#spinner').addClass('d-none');
+                    $('#spinner-ocr').addClass('d-none');
                 }
             },
             contentType: false,
@@ -296,13 +302,17 @@ $(document).ready(function (e) {
                     $('#input-object').val(response.mailObject);
                     $('#input-message').val(response.mailMessage);
                     $('#input-date').val(response.mailDate);
-
-                    alert("---"+response.mailDate);
                 }
             }
 
         );
     });
 
+    $("#form-search-mails").submit(function (e) {
+
+        $('#search-mails-text').addClass('d-none');
+        $('#search-mails-spinner').removeClass('d-none');
+        
+    });
     
 });

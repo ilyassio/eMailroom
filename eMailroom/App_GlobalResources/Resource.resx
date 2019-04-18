@@ -198,8 +198,8 @@
   <data name="NewPassword" xml:space="preserve">
     <value>New password</value>
   </data>
-  <data name="Object" xml:space="preserve">
-    <value>Object</value>
+  <data name="Subject" xml:space="preserve">
+    <value>Subject</value>
   </data>
   <data name="OldPassword" xml:space="preserve">
     <value>Old password</value>
@@ -275,5 +275,8 @@
   </data>
   <data name="MailLang" xml:space="preserve">
     <value>Mail language</value>
+  </data>
+  <data name="ErrorUploadedFileType" xml:space="preserve">
+    <value>Uploaded file type is not supported. (Supported files : PDF, JPG, JPEG, PNG)</value>
   </data>
 </root>

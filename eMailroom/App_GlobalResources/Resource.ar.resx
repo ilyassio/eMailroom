@@ -198,7 +198,7 @@
   <data name="NewPassword" xml:space="preserve">
     <value>كلمة مرور جديدة</value>
   </data>
-  <data name="Object" xml:space="preserve">
+  <data name="Subject" xml:space="preserve">
     <value>الموضوع</value>
   </data>
   <data name="OldPassword" xml:space="preserve">

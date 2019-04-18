@@ -1,12 +1,153 @@
-﻿
+﻿@using eMailroom.Models
 @{
     ViewBag.Title = "Mails";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-
+<style>
+    .input-group-text{
+        width: 150px;
+    }
+</style>
 <div class="container-fluid">
+    <div class="card card-list">
+        <div class="card-header card-header-list">
+            <div class="float-left">
+                <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#search-mail-collapse">Recherche avancée <i class="fas fa-chevron-down"></i></button>
+            </div>
+            
+            <div class="collapse" id="search-mail-collapse" style="margin-top: 50px;">
+                <hr>
+                <p style="padding: 3px;width:100%; color:#17a2b8"><i class="fas fa-info"></i> Vous n'êtes pas obligé de remplir tous les champs.</p>
+                <form action="SearchMails" method="post" id="form-search-mails">
+                    <div style="width: 50%;float: left;padding: 0px 15px 0px 0px">
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" for="select-type-mail">@Resources.Resource.Type</span>
+                            </div>
+                            <select class="form-control selectpicker" name="type" id="select-type">
+                                <option value="" selected>@Resources.Resource.ChooseSelect</option>
+                                <option value="incoming">@Resources.Resource.Incoming</option>
+                                <option value="outgoing">@Resources.Resource.Outgoing</option>
+                            </select>
+                        </div>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">@Resources.Resource.Date</span>
+                            </div>
+                            <input type="date" class="form-control" name="date" id="input-date">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">Date d'entrée</span>
+                            </div>
+                            <input type="date" class="form-control" name="entryDate" id="input-date">
+                        </div>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">@Resources.Resource.Sender</span>
+                            </div>
+                            <select class="form-control selectpicker" id="select-sender" name="sender" data-live-search="true" header="true">
+                                <option value="" selected>@Resources.Resource.ChooseSelect</option>
+                            </select>
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">@Resources.Resource.Receiver</span>
+                            </div>
+                            <select class="form-control selectpicker" id="select-receiver" name="receiver" data-live-search="true">
+                                <option value="" selected>@Resources.Resource.ChooseSelect</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div style="width: 50%;float: left;padding: 0px 0px 0px 15px ">
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">Objet contient : </span>
+                            </div>
+                            <input type="text" class="form-control" id="input-object" name="subject">
+                        </div>
+
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text">Message contient : </span>
+                            </div>
+                            <textarea class="form-control" style="height: 92px" autocomplete="off" name="message" id="input-message"></textarea>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block " id="btn-search-mails"><span id="search-mails-text">Chercher les courriers correspondant</span><span id="search-mails-spinner" class="spinner-border spinner-border d-none" role="status" aria-hidden="true"></span></button>
+                </form>
+            </div>
+        </div>
+        <div class="card-header card-header-list">
+            <div class="card-header-title float-left mt-2">
+                <i class="fas fa-table"></i> Liste des courriers
+            </div>
+            <div class="float-right">
+                <input type="text" class="form-control search-input" style="width:300px" placeholder="Cherchez un courrier dans le tableau..." id="search_field">
+            </div>
+        </div>
+        <div class="card-body card-body-list p-0">
+            <div class="table-responsive table-responsive-list">
+                <table id="myTable" class="table table-bordered table-hover table-list mb-0">
+                    <thead class="thead-light">
+                        <tr class="myHead">
+                            <th>Id</th>
+                            <th>Type</th>
+                            <th>Date</th>
+                            <th>Date d'entrée</th>
+                            <th>Expéditeur</th>
+                            <th>Destinataire</th>
+                            <th>Objet</th>
+                            <th>Message</th>
+                        </tr>
+                    </thead>
+                    <tbody class="list-click" id="tbody">
+                        @foreach ( var mail in (List<Mail>) ViewData["mails"] )
+                        {
+                            string Type;
+                            if (mail.Type == "incoming")
+                            {
+                                Type = @Resources.Resource.Incoming;
+                            }
+                            else
+                            {
+                                Type = @Resources.Resource.Outgoing;
+                            }
+                            <tr class="mail-line" id="@mail.Id">
+                                <td>@mail.Id</td>
+                                <td>@Type</td>
+                                <td>@mail.Date</td>
+                                <td>@mail.EntryDate</td>
+                                <td>@mail.Sender.Lastname @mail.Sender.Firstname</td>
+                                <td>@mail.Receiver.Lastname @mail.Receiver.Firstname</td>
+                                <td>@mail.Subject</td>
+                                <td>@mail.Message</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 </div>
+
+@section scripts
+{
+    <script>
+        $('#search_field').on('keyup', function () {
+
+            var value = $(this).val();
+            var patt = new RegExp(value, "i");
+
+            $('#myTable').find('tr').each(function () {
+                if (!($(this).find('td').text().search(patt) >= 0)) {
+                    $(this).not('.myHead').hide();
+                }
+                if (($(this).find('td').text().search(patt) >= 0)) {
+                    $(this).show();
+                }
+            });
+
+        });
+    </script>
+}
 
 
 

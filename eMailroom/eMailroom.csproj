@@ -161,15 +161,15 @@
     <Compile Include="Models\Contact.cs" />
     <Compile Include="Models\Database.cs" />
     <Compile Include="Models\Employee.cs" />
-    <Compile Include="Models\Helper.cs" />
+    <Compile Include="Models\Tesseract.cs" />
     <Compile Include="Models\Mail.cs" />
     <Compile Include="Models\Person.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App_Data\eMailroomDatabase.mdf" />
-    <Content Include="App_Data\eMailroomDatabase_log.ldf">
-      <DependentUpon>eMailroomDatabase.mdf</DependentUpon>
+    <Content Include="App_Data\eMailroom.mdf" />
+    <Content Include="App_Data\eMailroom_log.ldf">
+      <DependentUpon>eMailroom.mdf</DependentUpon>
     </Content>
     <Content Include="Content\bootstrap-grid.css" />
     <Content Include="Content\bootstrap-grid.min.css" />
@@ -181,6 +181,7 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\brands.css" />
     <Content Include="Content\brands.min.css" />
+    <Content Include="Content\dataTables.bootstrap4.min.css" />
     <Content Include="Content\fontawesome-all.css" />
     <Content Include="Content\fontawesome-all.min.css" />
     <Content Include="Content\fontawesome.css" />
@@ -255,6 +256,7 @@
     <Content Include="Content\bootstrap-reboot.css.map" />
     <Content Include="Content\bootstrap-grid.min.css.map" />
     <Content Include="Content\bootstrap-grid.css.map" />
+    <Content Include="Scripts\dataTables.bootstrap4.min.js" />
     <Content Include="Scripts\esm\popper-utils.js" />
     <Content Include="Scripts\esm\popper-utils.min.js" />
     <Content Include="Scripts\esm\popper.js" />
@@ -401,6 +403,7 @@
     <None Include="Scripts\jquery.validate-vsdoc.js" />
     <Content Include="Scripts\jquery-ui-1.12.1.js" />
     <Content Include="Scripts\jquery-ui-1.12.1.min.js" />
+    <Content Include="Scripts\jquery.dataTables.min.js" />
     <Content Include="Scripts\jquery.validate.js" />
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
@@ -520,7 +523,6 @@
     <Content Include="Views\Secretary\Companys.cshtml" />
     <Content Include="Views\Secretary\Contacts.cshtml" />
     <Content Include="Views\Secretary\Employees.cshtml" />
-    <Content Include="Views\Secretary\Tasks.cshtml" />
     <Content Include="Tesseract\tessdata\ara.traineddata" />
     <Content Include="Tesseract\tessdata\configs\alto" />
     <Content Include="Tesseract\tessdata\configs\ambigs.train" />
